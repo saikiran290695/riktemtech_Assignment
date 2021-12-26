@@ -1,6 +1,7 @@
 ﻿using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json.Linq;
 using RiktamTech.DTO;
+using RiktamTech.IServices;
 using RiktamTech.Models;
 using RiktamTech.Services;
 using System;
@@ -17,13 +18,15 @@ using System.Threading;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Http;
+using Unity;
 using static System.Net.WebRequestMethods;
 
 namespace RiktamTech.Controllers
 {    
     public class UsersController : ApiController
     {
-        public AuthServices _serivices;
+        private IAuthServices _authServices = DependencyInjection.Unity.container.Resolve<IAuthServices>();
+        private IUserServices _userServices = DependencyInjection.Unity.container.Resolve<IUserServices>();
 
         [HttpPost]
         public string login()
@@ -43,9 +46,8 @@ namespace RiktamTech.Controllers
             string token = string.Empty;
             
             if (user != null)
-            {
-                AuthServices services = new AuthServices();
-                token = services.GenerateJWTToken(user);
+            {                
+                token = _authServices.GenerateJWTToken(user);
             }
 
             return token;
@@ -54,10 +56,8 @@ namespace RiktamTech.Controllers
         [HttpPost]
         [Route("api/users/signup")]
         public IHttpActionResult userSignUp(UserSignUp user) {            
-            
-            UserServices services = new UserServices();                   
-
-            if (!services.SignUpUser(user))
+                        
+            if (!_userServices.SignUpUser(user))
             {
                 return BadRequest();
             }
@@ -69,10 +69,9 @@ namespace RiktamTech.Controllers
         [Route("api/users/getdetails")]
         public JwtPayload getTokenDetails() {
             
-            string token = Request.Headers.Where( x => x.Key == "token").SingleOrDefault().Value.FirstOrDefault();
-            AuthServices services = new AuthServices();
+            string token = Request.Headers.Where( x => x.Key == "token").SingleOrDefault().Value.FirstOrDefault();            
 
-            JwtPayload claims = services.DecryptJWTToken(token);
+            JwtPayload claims = _authServices.DecryptJWTToken(token);
 
             return claims;
         }

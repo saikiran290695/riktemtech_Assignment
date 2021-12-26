@@ -1,24 +1,22 @@
 ﻿using RiktamTech.DTO;
-using RiktamTech.Services;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+using RiktamTech.IServices;
 using System.Web;
 using System.Web.Http;
+using Unity;
 
 namespace RiktamTech.Controllers
 {
     public class MessagesController : ApiController
     {
+        IMessageServices _messageServices = DependencyInjection.Unity.container.Resolve<IMessageServices>();
+        IAuthServices _authServices = DependencyInjection.Unity.container.Resolve<IAuthServices>();
+
         [HttpPost]
         [Route("api/messages/sendtouser")]
         public IHttpActionResult sendMessage(Message mgs)
         {
-            MessageServices services = new MessageServices();
-            AuthServices authServices = new AuthServices();
 
-            if (!services.SendMessages(mgs, authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0])))
+            if (!_messageServices.SendMessages(mgs, _authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0])))
                 return BadRequest("Error in sending messgae");
 
             return Ok("Success");
@@ -28,24 +26,16 @@ namespace RiktamTech.Controllers
         [Route("api/messages/getmessages")]
         public MessagesDTO getMessages() {
 
-            MessageServices services = new MessageServices();
-            
-            AuthServices authServices = new AuthServices();
-
-            return services.RetriveMessages(authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]));
+            return _messageServices.RetriveMessages(_authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]));
         }
 
         [HttpPost]
         [Route("api/messages/senttogroup")]
         public IHttpActionResult sendMessage(GroupDTO group)
-        {
-            MessageServices services = new MessageServices();
+        {            
+            group.currentUserId = _authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]);
 
-            AuthServices authServices = new AuthServices();
-
-            group.currentUserId = authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]);
-
-            if (!services.SendMessage(group))
+            if (!_messageServices.SendMessage(group))
                 return BadRequest("Error");
 
             return Ok("Success");
