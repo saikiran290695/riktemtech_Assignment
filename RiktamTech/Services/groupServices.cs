@@ -1,4 +1,5 @@
 ﻿using RiktamTech.DTO;
+using RiktamTech.IServices;
 using RiktamTech.Models;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ using System.Web;
 
 namespace RiktamTech.Services
 {
-    public class groupServices
+    public class GroupServices : IGroupServices
     {
-        public bool createGroup(groupDTO group)
+        public bool CreateGroup(GroupDTO group)
         {
             if (group == null)
                 return false;
@@ -41,7 +42,7 @@ namespace RiktamTech.Services
             return true;
         }
 
-        public bool addUsersToGroup(groupDTO group)
+        public bool AddUsersToGroup(GroupDTO group)
         {
             if (group == null)
                 return false;

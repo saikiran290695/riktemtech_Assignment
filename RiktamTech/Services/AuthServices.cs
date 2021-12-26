@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using RiktamTech.DTO;
+using RiktamTech.IServices;
 using RiktamTech.Models;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,11 @@ using System.Web;
 namespace RiktamTech
 {
 
-    public class AuthServices
+    public class AuthServices: IAuthServices
     {
         public string securityKey = "somethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomethingsomething";
         
-        public string generateJWTToken(USERS user)
+        public string GenerateJWTToken(USERS user)
         {
             var claims = new[] {
                 new Claim("Name", user.NAME),
@@ -39,7 +40,7 @@ namespace RiktamTech
             return tokenHandler.WriteToken(token);
         }
 
-        public DecodedToken validateJWTToken(string token)
+        public DecodedToken ValidateJWTToken(string token)
         {            
             var key = Encoding.ASCII.GetBytes(securityKey);
             var handler = new JwtSecurityTokenHandler();
@@ -71,16 +72,15 @@ namespace RiktamTech
             return decodedToken;
         }
 
-
-        public JwtPayload decryptJWTToken(string token)
+        public JwtPayload DecryptJWTToken(string token)
         { 
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             return handler.ReadJwtToken(token).Payload;            
         }
 
-        public int getCurrentUserId(string token)
+        public int GetCurrentUserId(string token)
         {
-            JwtPayload payload = decryptJWTToken(HttpContext.Current.Request.Headers.GetValues("token")[0]);
+            JwtPayload payload = DecryptJWTToken(HttpContext.Current.Request.Headers.GetValues("token")[0]);
             payload.TryGetValue("ID", out var from_Id);
             return Convert.ToInt32(from_Id);
         }

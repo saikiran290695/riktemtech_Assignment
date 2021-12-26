@@ -38,7 +38,7 @@ namespace RiktamTech.Filters
                         if (JWTtoken != null)
                         {
                             AuthServices services = new AuthServices();
-                            DecodedToken decodedToken = services.validateJWTToken(JWTtoken);
+                            DecodedToken decodedToken = services.ValidateJWTToken(JWTtoken);
 
                             if (decodedToken.responseCode == 401)
                             {

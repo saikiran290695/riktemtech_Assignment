@@ -11,14 +11,14 @@ namespace RiktamTech.Controllers
     {
         [HttpPost]
         [Route("api/group/createGroup")]
-        public IHttpActionResult createGroup(groupDTO group) { 
-            groupServices services = new groupServices();
+        public IHttpActionResult createGroup(GroupDTO group) { 
+            GroupServices services = new GroupServices();
 
             AuthServices authServices = new AuthServices();
 
-            group.currentUserId = authServices.getCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]);
+            group.currentUserId = authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]);
 
-            if (!services.createGroup(group))
+            if (!services.CreateGroup(group))
                 return BadRequest("Error");
 
             return Ok("Success");
@@ -26,19 +26,18 @@ namespace RiktamTech.Controllers
 
         [HttpPost]
         [Route("api/group/addMemebers")]
-        public IHttpActionResult addMembers(groupDTO group) {
+        public IHttpActionResult addMembers(GroupDTO group) {
 
-            groupServices services = new groupServices();
+            GroupServices services = new GroupServices();
 
             AuthServices authServices = new AuthServices();
 
-            group.currentUserId = authServices.getCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]);
+            group.currentUserId = authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]);
 
-            if (!services.addUsersToGroup(group))
+            if (!services.AddUsersToGroup(group))
                 return BadRequest("Error");
 
             return Ok();
-        }
-        
+        }       
     }
 }

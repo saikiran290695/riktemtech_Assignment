@@ -1,4 +1,5 @@
 ﻿using RiktamTech.DTO;
+using RiktamTech.IServices;
 using RiktamTech.Models;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ using System.Web;
 
 namespace RiktamTech.Services
 {
-    public class MessageServices
+    public class MessageServices : IMessageServices
     {
-        public bool sendMessages(Message mgs, int fromId)
+        public bool SendMessages(Message mgs, int fromId)
         { 
             if(mgs == null)
                 return false;
@@ -36,7 +37,7 @@ namespace RiktamTech.Services
             return true;
         }
 
-        public MessagesDTO retriveMessages(int userID) { 
+        public MessagesDTO RetriveMessages(int userID) { 
             MessagesDTO mgs = new MessagesDTO();
             databaseContext db = new databaseContext();            
 
@@ -74,7 +75,7 @@ namespace RiktamTech.Services
             return mgs;
         }
 
-        public bool sendMessage(groupDTO group)
+        public bool SendMessage(GroupDTO group)
         {
 
             if (group == null)

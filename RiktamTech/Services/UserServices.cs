@@ -1,4 +1,5 @@
 ﻿using RiktamTech.DTO;
+using RiktamTech.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ using System.Web;
 
 namespace RiktamTech.Services
 {
-    public class UserServices
+    public class UserServices : IUserServices
     {
-        public bool signUpUser(UserSignUp user)
+        public bool SignUpUser(UserSignUp user)
         { 
             if(user == null)
                 return false;

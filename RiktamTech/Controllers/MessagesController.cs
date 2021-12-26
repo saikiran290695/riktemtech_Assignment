@@ -18,7 +18,7 @@ namespace RiktamTech.Controllers
             MessageServices services = new MessageServices();
             AuthServices authServices = new AuthServices();
 
-            if (!services.sendMessages(mgs, authServices.getCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0])))
+            if (!services.SendMessages(mgs, authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0])))
                 return BadRequest("Error in sending messgae");
 
             return Ok("Success");
@@ -32,20 +32,20 @@ namespace RiktamTech.Controllers
             
             AuthServices authServices = new AuthServices();
 
-            return services.retriveMessages(authServices.getCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]));
+            return services.RetriveMessages(authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]));
         }
 
         [HttpPost]
         [Route("api/messages/senttogroup")]
-        public IHttpActionResult sendMessage(groupDTO group)
+        public IHttpActionResult sendMessage(GroupDTO group)
         {
             MessageServices services = new MessageServices();
 
             AuthServices authServices = new AuthServices();
 
-            group.currentUserId = authServices.getCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]);
+            group.currentUserId = authServices.GetCurrentUserId(HttpContext.Current.Request.Headers.GetValues("token")[0]);
 
-            if (!services.sendMessage(group))
+            if (!services.SendMessage(group))
                 return BadRequest("Error");
 
             return Ok("Success");

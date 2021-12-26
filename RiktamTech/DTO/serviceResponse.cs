@@ -5,7 +5,7 @@ using System.Web;
 
 namespace RiktamTech.DTO
 {
-    public class serviceResponse
+    public class ServiceResponse
     {
         public bool isSuccess { get; set; }
         public string message { get; set; }

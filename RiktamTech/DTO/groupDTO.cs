@@ -5,7 +5,7 @@ using System.Web;
 
 namespace RiktamTech.DTO
 {
-    public class groupDTO
+    public class GroupDTO
     {
         public int currentUserId { get; set; }
         public int groupId { get; set; }

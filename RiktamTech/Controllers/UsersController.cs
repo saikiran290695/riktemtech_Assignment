@@ -45,7 +45,7 @@ namespace RiktamTech.Controllers
             if (user != null)
             {
                 AuthServices services = new AuthServices();
-                token = services.generateJWTToken(user);
+                token = services.GenerateJWTToken(user);
             }
 
             return token;
@@ -57,7 +57,7 @@ namespace RiktamTech.Controllers
             
             UserServices services = new UserServices();                   
 
-            if (!services.signUpUser(user))
+            if (!services.SignUpUser(user))
             {
                 return BadRequest();
             }
@@ -72,7 +72,7 @@ namespace RiktamTech.Controllers
             string token = Request.Headers.Where( x => x.Key == "token").SingleOrDefault().Value.FirstOrDefault();
             AuthServices services = new AuthServices();
 
-            JwtPayload claims = services.decryptJWTToken(token);
+            JwtPayload claims = services.DecryptJWTToken(token);
 
             return claims;
         }
