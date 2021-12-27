@@ -8,6 +8,12 @@ namespace RiktamTech.IServices
 {
     public interface IUserServices
     {
-        bool SignUpUser(UserSignUp user);
+        bool SignUpUser(UsersDTO user);
+
+        bool UpdateUser(UsersDTO user);
+
+        bool DeleteUser(string userHanler);
+
+        UsersDTO GetUserDetails(string handler);
     }
 }

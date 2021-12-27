@@ -216,7 +216,7 @@
     <Compile Include="DTO\GroupDTO.cs" />
     <Compile Include="DTO\MessageDTO.cs" />
     <Compile Include="DTO\ServiceResponse.cs" />
-    <Compile Include="DTO\UserSignUp.cs" />
+    <Compile Include="DTO\UsersDTO.cs" />
     <Compile Include="Filters\JWTAuthenticationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

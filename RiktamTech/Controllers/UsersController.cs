@@ -1,25 +1,14 @@
-﻿using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using RiktamTech.DTO;
 using RiktamTech.IServices;
 using RiktamTech.Models;
-using RiktamTech.Services;
 using System;
-using System.Collections.Generic;
-using System.DirectoryServices.AccountManagement;
 using System.IdentityModel.Tokens.Jwt;
-using System.IO;
 using System.Linq;
-using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Security.Principal;
 using System.Text;
-using System.Threading;
-using System.Web;
-using System.Web.Helpers;
 using System.Web.Http;
 using Unity;
-using static System.Net.WebRequestMethods;
 
 namespace RiktamTech.Controllers
 {    
@@ -55,7 +44,7 @@ namespace RiktamTech.Controllers
 
         [HttpPost]
         [Route("api/users/signup")]
-        public IHttpActionResult userSignUp(UserSignUp user) {            
+        public IHttpActionResult userSignUp(UsersDTO user) {            
                         
             if (!_userServices.SignUpUser(user))
             {
@@ -64,10 +53,7 @@ namespace RiktamTech.Controllers
             return Ok();
         }
 
-
-        [HttpGet()]
-        [Route("api/users/getdetails")]
-        public JwtPayload getTokenDetails() {
+        private JwtPayload getTokenDetails() {
             
             string token = Request.Headers.Where( x => x.Key == "token").SingleOrDefault().Value.FirstOrDefault();            
 
@@ -75,6 +61,32 @@ namespace RiktamTech.Controllers
 
             return claims;
         }
+       
+        [HttpPut]
+        [Route("api/users/updateuser")]
+        public IHttpActionResult updateUser(UsersDTO user)
+        {
+            if (!_userServices.UpdateUser(user))
+                return BadRequest();
 
+            return Ok("Updated");
+        }
+
+        [HttpGet]
+        [Route("api/users/deleteuser")]        
+        public IHttpActionResult deleteUser([FromUri] string handler = null)
+        {
+            if (!_userServices.DeleteUser(handler))
+                return BadRequest();
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("api/users/getuserdetails")]
+        public UsersDTO getUserDetails([FromUri] string handler = null)
+        {
+            return _userServices.GetUserDetails(handler);            
+        }
     }
 }
